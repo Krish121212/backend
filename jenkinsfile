@@ -13,7 +13,7 @@ pipeline {
         stage('test') {
             steps {  //if you awant to write shell script,linux commands in pipeline use """
                 sh """ 
-                    echo "Testing"
+                    echo "Testing 1"
                 """
             }
         }
