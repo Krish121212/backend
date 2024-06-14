@@ -30,6 +30,13 @@ pipeline {
                 """
             }
         }
+        stage('Build'){
+            steps{
+                sh """
+                    zip -r backend.${appVersion}.zip * -x Jenkinsfile -x backend.${appVersion}.zip
+                """
+            }
+        }
     }
     post {//we have many posts,below are 3 among them. so posts run after build.used for trigging mails about status etc
         always { 
