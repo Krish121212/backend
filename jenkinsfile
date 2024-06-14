@@ -11,9 +11,11 @@ pipeline {
     stages {
         stage('Read Version') {
             steps {
+                script{ //grovy script so code need to be in script {}
                 def packageJson = readJSON file: 'package.json'
                 def appVersion = packageJson.Version
                 echo "application version: $appVersion"
+                }
             }
         }
         stage('install dependencies') {
@@ -21,7 +23,7 @@ pipeline {
                 sh """ 
                     npm install 
                     ls -ltr
-                    echo $appVersion
+                    echo "application version: $appVersion"
                 """
             }
         }
