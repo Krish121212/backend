@@ -8,12 +8,15 @@ pipeline {
         disableConcurrentBuilds() //Next build will wait for the previous build to get completed.
         ansiColor('xterm')
         }
+    environment {
+        def appVersion = '' //declared variable at env level, this can be used in any stage.
+    }
     stages {
         stage('Read Version') {
             steps {
                 script{ //grovy script so code need to be in script {}
                 def packageJson = readJSON file: 'package.json'
-                def appVersion = packageJson.Version
+                appVersion = packageJson.Version
                 echo "application version: $appVersion"
                 }
             }
