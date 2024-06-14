@@ -8,7 +8,6 @@ pipeline {
         disableConcurrentBuilds() //Next build will wait for the previous build to get completed.
         ansiColor('xterm')
         }
-    }
     stages {
         stage('test') {
             steps {  //if you awant to write shell script,linux commands in pipeline use """
