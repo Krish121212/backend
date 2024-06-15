@@ -62,10 +62,10 @@ pipeline {
         }
         stage('Deploy') {
             steps{
-                def params = [
-                    string(name: 'appVersion', value: "${appVersion}") //if wait is true this backend will wait until downstream 'backend-deploy' is completed
-                ]
                 script{
+                    def params = [
+                        string(name: 'appVersion', value: "${appVersion}") //if wait is true this backend will wait until downstream 'backend-deploy' is completed
+                    ]   
                     build job: 'backend-deploy', parameters: params, wait: false
                 }
             }
