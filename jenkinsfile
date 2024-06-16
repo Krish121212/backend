@@ -8,6 +8,9 @@ pipeline {
         disableConcurrentBuilds() //Next build will wait for the previous build to get completed.
         ansiColor('xterm')
     }
+    parameters{
+        booleanParam(name: 'deploy', defaultValue: false, description: 'Toggle this value')
+    }
     environment {
         def appVersion = '' //declared variable at env level, this can be used in any stage.
         nexusUrl = 'nexus.devopskk.online:8081' //nexus runs on port 8081 jenkins on 8080
@@ -75,6 +78,11 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when { // if this expression is true then below deploy script will run.same like snapshot in wells
+                expression{
+                    params.deploy
+                }
+            }
             steps{
                 script{
                     def params = [
