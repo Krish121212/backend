@@ -114,10 +114,4 @@ pipeline {
             echo 'the steps we write here will run after only failure build'
         }
     }
-<<<<<<< HEAD:jenkinsfile
 }
-}
-=======
-    }
-}
->>>>>>> 79a94bb5f4c8dc5864c4be8a0be613125e094552:Jenkinsfile
