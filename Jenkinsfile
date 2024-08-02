@@ -13,7 +13,7 @@ pipeline {
     }
     environment {
         def appVersion = '' //declared variable at env level, this can be used in any stage.
-        nexusUrl = 'http://52.86.41.202:8081' //nexus runs on port 8081 jenkins on 8080
+        nexusUrl = '52.86.41.202:8081' //nexus runs on port 8081 jenkins on 8080
     }
     stages {
         stage('Read Version') {
