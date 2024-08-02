@@ -13,7 +13,7 @@ pipeline {
     }
     environment {
         def appVersion = '' //declared variable at env level, this can be used in any stage.
-        nexusUrl = 'nexus.devopskk.online:8081' //nexus runs on port 8081 jenkins on 8080
+        nexusUrl = 'http://52.86.41.202:8081' //nexus runs on port 8081 jenkins on 8080
     }
     stages {
         stage('Read Version') {
@@ -37,10 +37,30 @@ pipeline {
         stage('Build'){
             steps{
                 sh """
-                    pwd
                     zip -q -r backend.${appVersion}.zip * -x Jenkinsfile -x backend.${appVersion}.zip
                     ls -ltr
                 """
+            }
+        }
+        stage('Nexus Artifact Upload'){
+            steps{ //while variables using below give "" not ''
+                script{ // in Jenkins for push we need credantials line 52. pull no need. As we are pushing to nexus credantials are mandatory
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: "${nexusUrl}",
+                        groupId: 'com.expense',
+                        version: "${appVersion}",
+                        repository: "backend",
+                        credentialsId: 'nexus-auth',
+                        artifacts: [
+                            [artifactId: "backend" ,
+                            classifier: '',
+                            file: "backend-" + "${appVersion}" + '.zip',
+                            type: 'zip']
+                        ]
+                    )
+                }
             }
         }
 
@@ -65,27 +85,6 @@ pipeline {
             }
         }
 
-        stage('Nexus Artifact Upload'){
-            steps{ //while variables using below give "" not ''
-                script{ // in Jenkins for push we need credantials line 52. pull no need. As we are pushing to nexus credantials are mandatory
-                    nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'http',
-                        nexusUrl: "${nexusUrl}",
-                        groupId: 'com.expense',
-                        version: "${appVersion}",
-                        repository: "backend",
-                        credentialsId: 'nexus-auth',
-                        artifacts: [
-                            [artifactId: "backend" ,
-                            classifier: '',
-                            file: "backend-" + "${appVersion}" + '.zip',
-                            type: 'zip']
-                        ]
-                    )
-                }
-            }
-        }
         stage('Deploy') {
             when { // if this expression is true then below deploy script will run.same like snapshot in wells
                 expression{
