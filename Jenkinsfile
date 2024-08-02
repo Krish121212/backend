@@ -63,28 +63,6 @@ pipeline {
                 }
             }
         }
-
-/*         stage('Sonar Scan'){
-            environment {
-                scannerHome = tool 'sonar-6.0' //referring scanner CLI
-            }
-            steps {
-                script {
-                    withSon arQubeEnv('sonar-6.0') { //referring sonar server
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
-            }
-        } */
-
-/*         stage("Quality Gate") {
-            steps {
-              timeout(time: 30, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-        }
-
         stage('Deploy') {
             when { // if this expression is true then below deploy script will run.same like snapshot in wells
                 expression{
@@ -99,7 +77,28 @@ pipeline {
                     build job: 'backend-deploy', parameters: params, wait: false
                 }
             }
-        }  */   
+        } 
+
+        stage('Sonar Scan'){
+            environment {
+                scannerHome = tool 'sonar-6.0' //referring scanner CLI
+            }
+            steps {
+                script {
+                    withSon arQubeEnv('sonar-6.0') { //referring sonar server
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+              timeout(time: 30, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+        }   
     } 
 
     post {//we have many posts,below are 3 among them. so posts run after build.used for trigging mails about status etc
